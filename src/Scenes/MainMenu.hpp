@@ -30,6 +30,9 @@ public:
 		Option = new Button("Options", ((1280 / 2) - 300), 550, 290);
 		Quit = new Button("Quit", ((1280 / 2) + 10), 550, 290);
 
+		setViewportX(641);
+		setViewportY(361);
+
 		GameName = new Text("Through The Dark", 80);
 
 		music.openFromFile("content/music/main.wav");

@@ -20,8 +20,22 @@ int getWindowState();
 int getWindowSizeX();
 int getWindowSizeY();
 
+void setViewportX(int x);
+void setViewportY(int y);
+
 bool drawEntityHitboxes();
 bool isKeyPressed(sf::Keyboard::Key);
 bool isKeyHold(sf::Keyboard::Key);
 void setPlayerMove(bool newVal);
+void ExecuteOrder66(int);
 bool canPlayerMove();
+
+void RenderTextBox(sf::RenderWindow&, sf::View);
+void setID(int);
+
+bool _orderExecuted();
+bool _drawTextBox();
+
+void setOrderExecuted(bool);
+void setDrawTextBox(bool);
+void setCollide(bool);

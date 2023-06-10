@@ -174,6 +174,31 @@ public:
 		getWindow.draw(text);
 	}
 
+	void Render(sf::RenderWindow& getWindow, sf::Vector2f pos, bool centered, bool normal)
+	{
+		sf::Font font;
+		font.loadFromFile("content/fonts/BebasNeue-Regular.ttf");
+		std::string _name = name;
+		sf::Text text(_name, font);
+		text.setCharacterSize(fontSize);
+		text.setLetterSpacing(2);
+		if (!normal)
+		{
+			text.setStyle(sf::Text::Bold);
+		}
+
+		// for stupid reasons, _text width is always 0 no matter what so i have to do this shit
+		if (!centered)
+		{
+			text.setPosition(pos);
+		}
+		else
+		{
+			text.setPosition(sf::Vector2f((1280 / 2) - (text.getGlobalBounds().width / 2), pos.y));
+		}
+		getWindow.draw(text);
+	}
+
 private:
 	std::string name;
 	float fontSize;

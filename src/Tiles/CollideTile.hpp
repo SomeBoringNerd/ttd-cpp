@@ -9,18 +9,18 @@
 
 #include "../Entity/Player.hpp"
 #include "../TheDumpsterFire.hpp"
-
-class Tile
+#include "../Utility/GUI.hpp"
+class CollideTile
 {
 public:
-	Tile(sf::Vector2f position, std::string name)
+	CollideTile(sf::Vector2f position, std::string name)
 	{
 		this->name = name;
 		TileShape.setSize(sf::Vector2f(64, 64));
 		TileShape.setPosition(position);
 	};
 
-	Tile(sf::Vector2f position, std::string name, int side)
+	CollideTile(sf::Vector2f position, std::string name, int side)
 	{
 		this->name = name;
 		TileShape.setSize(sf::Vector2f(64, 64));
@@ -70,62 +70,25 @@ public:
 		getWindow.draw(_top);
 	}
 
-	/**
-	 * @param _setup : pointer to a function
-	 * @param FACING : 0 : BOTTOM | 1 : TOP | 2 : LEFT | 3 : RIGHT
-	*/
-	void CheckForCollision(void (*_setup)(void* userdata, int ID, sf::RenderWindow& getWindow, sf::View view), int FACING, void* userData, Player* player, sf::RenderWindow& getWindow, sf::View view)
+	bool Collide = false;
+
+	bool pressed;
+	bool _isKeyPressed(sf::Keyboard::Key key)
 	{
-		sf::RectangleShape _side(sf::Vector2f(9999, 32));
-		_side.setFillColor(sf::Color::Red);
-		_side.setPosition(sf::Vector2f(0, TileShape.getPosition().y + 16));
-
-		sf::RectangleShape _top(sf::Vector2f(32, 9999));
-		_top.setFillColor(sf::Color::Red);
-		_top.setPosition(sf::Vector2f(TileShape.getPosition().x + 16, 0));
-
-		sf::RectangleShape topCollider(sf::Vector2f(64, 2));
-		topCollider.setPosition(TileShape.getPosition());
-
-		sf::RectangleShape bottomCollider(sf::Vector2f(64, 2));
-		bottomCollider.setPosition(sf::Vector2f(TileShape.getPosition().x, TileShape.getPosition().y + 64));
-
-		sf::RectangleShape leftCollider(sf::Vector2f(2, 64));
-		leftCollider.setPosition(sf::Vector2f(TileShape.getPosition().x, TileShape.getPosition().y));
-
-		sf::RectangleShape rightCollider(sf::Vector2f(2, 64));
-		rightCollider.setPosition(sf::Vector2f(TileShape.getPosition().x + 64, TileShape.getPosition().y));
-
-		sf::FloatRect playerHitbox = player->getShape().getGlobalBounds();
-
-		if (playerHitbox.intersects(topCollider.getGlobalBounds()) && FACING)
+		if (sf::Keyboard::isKeyPressed(key))
 		{
-			if (_setup != nullptr)
+			if (!pressed)
 			{
-				_setup(userData, 0, getWindow, view);
+				pressed = true;
+				return true;
 			}
 		}
-		if (playerHitbox.intersects(bottomCollider.getGlobalBounds()) && !FACING)
+		else
 		{
-			if (_setup != nullptr)
-			{
-				_setup(userData, 0, getWindow, view);
-			}
+			pressed = false;
 		}
-		if (playerHitbox.intersects(leftCollider.getGlobalBounds()) && FACING == 2)
-		{
-			if (_setup != nullptr)
-			{
-				_setup(userData, 0, getWindow, view);
-			}
-		}
-		if (playerHitbox.intersects(rightCollider.getGlobalBounds()) && FACING == 3)
-		{
-			if (_setup != nullptr)
-			{
-				_setup(userData, 0, getWindow, view);
-			}
-		}
+
+		return false;
 	}
 
 	void Render(sf::RenderWindow& getWindow, Player* player)
@@ -160,18 +123,26 @@ public:
 		if (playerHitbox.intersects(topCollider.getGlobalBounds()))
 		{
 			topCollider.setFillColor(sf::Color::Blue);
+			setCollide(true);
+			setID(side);
 		}
 		if (playerHitbox.intersects(bottomCollider.getGlobalBounds()))
 		{
 			bottomCollider.setFillColor(sf::Color::Blue);
+			setCollide(true);
+			setID(side);
 		}
 		if (playerHitbox.intersects(leftCollider.getGlobalBounds()))
 		{
 			leftCollider.setFillColor(sf::Color::Blue);
+			setCollide(true);
+			setID(side);
 		}
 		if (playerHitbox.intersects(rightCollider.getGlobalBounds()))
 		{
 			rightCollider.setFillColor(sf::Color::Blue);
+			setCollide(true);
+			setID(side);
 		}
 
 		// so the deal with those _side and _top variable is that the player can never collide with the two of them at once
@@ -218,6 +189,12 @@ public:
 			getWindow.draw(bottomCollider);
 			getWindow.draw(rightCollider);
 			getWindow.draw(leftCollider);
+		}
+
+		if (Collide && _isKeyPressed(sf::Keyboard::E))
+		{
+			setOrderExecuted(true);
+			setDrawTextBox(true);
 		}
 	}
 

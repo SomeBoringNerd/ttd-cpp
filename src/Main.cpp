@@ -59,6 +59,17 @@ bool isKeyHold(sf::Keyboard::Key key)
 }
 bool pressed = false;
 
+int viewportX, viewportY;
+
+void setViewportX(int x)
+{
+	viewportX = x;
+}
+void setViewportY(int y)
+{
+	viewportY = y;
+}
+
 bool isKeyPressed(sf::Keyboard::Key key)
 {
 	if (sf::Keyboard::isKeyPressed(key))
@@ -75,6 +86,100 @@ bool isKeyPressed(sf::Keyboard::Key key)
 	}
 
 	return false;
+}
+
+bool orderExecuted = false;
+bool drawTextBox = false;
+
+bool _orderExecuted()
+{
+	return orderExecuted;
+}
+bool _drawTextBox()
+{
+	return drawTextBox;
+}
+
+void setOrderExecuted(bool e)
+{
+	orderExecuted = e;
+}
+void setDrawTextBox(bool e)
+{
+	drawTextBox = e;
+}
+int id;
+void setID(int e)
+{
+	id = e;
+}
+
+void RenderTextBox(sf::RenderWindow& window, sf::View view)
+{
+	sf::Vector2f viewCenter = view.getCenter();
+	sf::Vector2f viewSize = view.getSize();
+	sf::FloatRect viewBounds(viewCenter - viewSize / 2.0f, viewSize);
+
+	sf::Texture backGroundTexture;
+	backGroundTexture.loadFromFile("content/textures/textbox.png");
+
+	sf::RectangleShape backGround(sf::Vector2f(600, 250));
+	backGround.setPosition(sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 300, viewBounds.top + (getWindowSizeY() - 300)));
+	backGround.setTexture(&backGroundTexture);
+
+	window.draw(backGround);
+
+	// this is going to be really fucked up in a few months
+	switch (id)
+	{
+		case 0: {
+			Text* owl = new Text("This was such a great show...", 24);
+			owl->Render(window, sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 280, viewBounds.top + (getWindowSizeY() - 280)), false, true);
+			break;
+		}
+		case 1: {
+			Text* gravity = new Text("That was weirdly fun.", 24);
+			gravity->Render(window, sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 280, viewBounds.top + (getWindowSizeY() - 280)), false, true);
+			break;
+		}
+		case 2: {
+			Text* sleep = new Text("No time for this!", 24);
+			sleep->Render(window, sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 280, viewBounds.top + (getWindowSizeY() - 280)), false, true);
+			break;
+		}
+		case 3: {
+			Text* puter = new Text("I love my computer", 24);
+			puter->Render(window, sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 280, viewBounds.top + (getWindowSizeY() - 280)), false, true);
+			Text* puter2 = new Text("all my friends are inside it!", 24);
+			puter2->Render(window, sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 280, viewBounds.top + (getWindowSizeY() - 250)), false, true);
+			break;
+		}
+		default:
+			Text* weird = new Text("What you are seeing here is an error message", 24);
+			weird->Render(window, sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 280, viewBounds.top + (getWindowSizeY() - 280)), false);
+			Text* weird2 = new Text("Please report this on discord or whatever", 24);
+			weird2->Render(window, sf::Vector2f(viewBounds.left + (getWindowSizeX() / 2) - 280, viewBounds.top + (getWindowSizeY() - 250)), false);
+			break;
+	}
+}
+
+void ExecuteOrder66(int ID)
+{
+	switch (ID)
+	{
+		default:
+			break;
+		case 0:
+			setPlayerMove(false);
+			drawTextBox = true;
+			break;
+	}
+}
+
+bool Collide;
+void setCollide(bool e)
+{
+	Collide = e;
 }
 
 int main()
@@ -114,15 +219,15 @@ int main()
 	MainMenu* menu = new MainMenu();
 
 	SceneManager::LoadScene(menu);
-	sf::View view1;
+	sf::View worldView;
+	worldView.setSize(1280, 720);
 
-	view1.reset(sf::FloatRect(1, 1, 1280, 720));
-
-	window.setView(view1);
+	window.setView(worldView);
 
 	while (window.isOpen())
 	{
-		window.setView(view1);
+		orderExecuted = false;
+		window.setView(worldView);
 
 		while (window.pollEvent(event))
 		{
@@ -147,16 +252,19 @@ int main()
 				std::cout << scaleX << " | " << scaleY << std::endl;
 				if (x > 1280 && y > 720)
 				{
-					view1.reset(sf::FloatRect(-((x - 1280) / 2), -((y - 720) / 2), x, y));
+					worldView.reset(sf::FloatRect(-((x - 1280) / 2), -((y - 720) / 2), x, y));
 					SceneManager::RefreshUI();
 				}
 				else
 				{
-					view1.reset(sf::FloatRect(0, 0, x, y));
+					worldView.reset(sf::FloatRect(0, 0, x, y));
 					SceneManager::RefreshUI();
 				}
 			}
 		}
+
+		worldView.setCenter(sf::Vector2f(viewportX, viewportY));
+		worldView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
 
 		// Inside the game loop or the function where you check input
 		if (isKeyPressed(sf::Keyboard::F3))
@@ -168,10 +276,29 @@ int main()
 		if (getWindowState())
 		{
 			window.clear();
+			window.setView(worldView);
+			SceneManager::Update(window, worldView);
+		}
 
-			SceneManager::Update(window, view1);
+		if (isKeyPressed(sf::Keyboard::E) && !orderExecuted && Collide)
+		{
+			orderExecuted = true;
+			ExecuteOrder66(0);
+		}
+
+		if (drawTextBox)
+		{
+			RenderTextBox(window, window.getView());
+
+			if (isKeyPressed(sf::Keyboard::X))
+			{
+				drawTextBox = false;
+				setPlayerMove(true);
+			}
 		}
 		window.display();
+
+		Collide = false;
 	}
 
 	return 0;

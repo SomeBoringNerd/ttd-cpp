@@ -24,12 +24,12 @@ public:
 		back = new Button("Back", (25), 720 - 100, 300);
 
 		Special = new Text("Special thanks to", 80);
-
 		Zoe = new Text("@zoeyoung2563 : musics that are used in the game", 40);
-
 		Aseprite1 = new Text("Aseprite team : making an amazing", 40);
-
 		Aseprite2 = new Text("pixel art software and making it open source", 40);
+
+		setViewportX(641);
+		setViewportY(361);
 
 		music.openFromFile("content/music/credit.wav");
 		music.setVolume(getGlobalMusicVolume());
