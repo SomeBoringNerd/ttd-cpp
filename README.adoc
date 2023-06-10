@@ -1,6 +1,4 @@
-= Another Boring C++ Project
-
-you know them, you love them, random github project that i want to fork to learn stuff
+= Through The Dark repo
 
 = Credits
 [cols="~,~"]
