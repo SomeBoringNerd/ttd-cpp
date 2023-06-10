@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Categories=Game;Application;
+Terminal=false
+Exec=PixelPlight
+Path=~/.local/share/PixelPlight/
+Name=Pixel Plight
+Comment=Small rpg game
+Icon=~/.local/share/PixelPlight/logo.png

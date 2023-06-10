@@ -1,0 +1,23 @@
+= Another Boring C++ Project
+
+you know them, you love them, random github project that i want to fork to learn stuff
+
+= Credits
+[cols="~,~"]
+|===
+
+| Who made what
+| where I found it
+
+| reworking for providing a base cross platform vscode blank project so I dont have to make it myself
+| https://github.com/rewrking/sfml-vscode-boilerplate
+
+| Pink Noise for the musics used in this game. They allow usage of their music freely for non profit / non commercial games.
+| https://pinknoisegamemusic.bandcamp.com/track/main-menu-theme-song-8-bit
+
+| Aseprite team for making the best pixel art tool I've ever used
+| https://www.aseprite.org/
+|===
+= build
+
+check Build.md

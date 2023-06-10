@@ -1,0 +1,3 @@
+Windows users : use Pixel Plight.exe
+
+chad Linux users : run init.sh if you want to move copy the game to your application folder
