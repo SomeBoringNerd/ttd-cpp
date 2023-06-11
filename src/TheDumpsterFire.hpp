@@ -35,6 +35,7 @@ void setID(int);
 
 bool _orderExecuted();
 bool _drawTextBox();
+bool doesCollide();
 
 void setOrderExecuted(bool);
 void setDrawTextBox(bool);

@@ -170,8 +170,14 @@ void ExecuteOrder66(int ID)
 		default:
 			break;
 		case 0:
+		case 1:
+		case 2:
+		case 3: // textbox related stuff
 			setPlayerMove(false);
 			drawTextBox = true;
+			break;
+		case 4: // door in the first room
+			std::cout << "Going outside" << std::endl;
 			break;
 	}
 }
@@ -180,6 +186,10 @@ bool Collide;
 void setCollide(bool e)
 {
 	Collide = e;
+}
+bool doesCollide()
+{
+	return Collide;
 }
 
 int main()
@@ -204,7 +214,7 @@ int main()
 	sf::Uint8* buffer = new sf::Uint8[textureSize.x * textureSize.y * 4];
 
 	window.setIcon(64, 64, buffer);
-
+	bool f3Menu;
 	delete[] buffer;
 
 	/********/
@@ -269,7 +279,15 @@ int main()
 		// Inside the game loop or the function where you check input
 		if (isKeyPressed(sf::Keyboard::F3))
 		{
-			vDrawEntityHitboxes = !vDrawEntityHitboxes;
+			if (!f3Menu)
+			{
+				vDrawEntityHitboxes = !vDrawEntityHitboxes;
+				f3Menu = true;
+			}
+		}
+		else
+		{
+			f3Menu = false;
 		}
 
 		// dont run game update if the game is not focused
@@ -283,14 +301,14 @@ int main()
 		if (isKeyPressed(sf::Keyboard::E) && !orderExecuted && Collide)
 		{
 			orderExecuted = true;
-			ExecuteOrder66(0);
+			ExecuteOrder66(id);
 		}
 
 		if (drawTextBox)
 		{
 			RenderTextBox(window, window.getView());
 
-			if (isKeyPressed(sf::Keyboard::X))
+			if (isKeyPressed(sf::Keyboard::Z))
 			{
 				drawTextBox = false;
 				setPlayerMove(true);

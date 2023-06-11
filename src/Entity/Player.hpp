@@ -45,11 +45,6 @@ public:
 
 		PlayerShape.setSize(sf::Vector2f(64, 128));
 		setPlayerMove(true);
-		setPosition(500, 500);
-		if (getFlag())
-		{
-			setPosition(700, 500);
-		}
 	}
 
 	void Revert()
@@ -313,6 +308,12 @@ public:
 				getWindow.draw(hitbox);
 			}
 		}
+		else
+		{
+			PlayerShape.setTexture(&sprites[FACING][0]);
+		}
+
+		
 		getWindow.draw(PlayerShape);
 	}
 
