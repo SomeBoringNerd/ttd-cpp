@@ -27,7 +27,7 @@ public:
 		this->name = "Walker";
 		this->player = new Player(20, 0, 0, "Player", 0);
 
-		if (false)
+		if (true) // 2115 2175
 		{
 			for (int x = 0; x < (64 * 15); x += 64)
 			{
@@ -174,9 +174,21 @@ public:
 		getWindow.draw(BackGround);
 		getWindow.draw(House2_Shape);
 
+		if (isKeyPressed(sf::Keyboard::Space))
+		{
+			std::cout << player->getPosition().x << " | " << player->getPosition().y << std::endl;
+		}
+
 		for (Tile* tile : tileset)
 		{
 			tile->Render(getWindow, player);
+		}
+
+		if (teleportFlag())
+		{
+			player->setPosition(2115, 2175);
+			player->setPosition(2115, 2175);
+			setTeleportFlag(0);
 		}
 
 		player->Render(getWindow);
@@ -230,6 +242,11 @@ public:
 		sf::RectangleShape _UI(sf::Vector2f(164 * 2, 70 * 2));
 		_UI.setTexture(&UI_Texture);
 		_UI.setPosition(sf::Vector2f(viewBounds.left + 10, viewBounds.top + 10));
+
+		sf::RectangleShape trace(sf::Vector2f(68000000, 5));
+		trace.setPosition(sf::Vector2f(2924, -5481));
+		trace.setRotation(-83.6f);
+		getWindow.draw(trace);
 
 		getWindow.draw(_UI);
 		if (doesCollide())

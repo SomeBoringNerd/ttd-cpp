@@ -40,3 +40,6 @@ bool doesCollide();
 void setOrderExecuted(bool);
 void setDrawTextBox(bool);
 void setCollide(bool);
+
+int teleportFlag();
+void setTeleportFlag(int);

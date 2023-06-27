@@ -70,6 +70,16 @@ void setViewportY(int y)
 	viewportY = y;
 }
 
+int tp_flag = 0;
+int teleportFlag()
+{
+	return tp_flag;
+}
+void setTeleportFlag(int e)
+{
+	tp_flag = e;
+}
+
 bool isKeyPressed(sf::Keyboard::Key key)
 {
 	if (sf::Keyboard::isKeyPressed(key))
@@ -177,7 +187,7 @@ void ExecuteOrder66(int ID)
 			drawTextBox = true;
 			break;
 		case 4: // door in the first room
-			std::cout << "Going outside" << std::endl;
+			tp_flag = 1;
 			break;
 	}
 }
